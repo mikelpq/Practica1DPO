@@ -1,11 +1,10 @@
 package JsonModel;
 
-import DataModel.DataModel;
-import DataModel.Location;
+import DataModel.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import java.util.ArrayList;
+import java.io.FileWriter;
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileReader;
@@ -16,15 +15,16 @@ import java.nio.file.Paths;
 
 public class JsonModel {
     private DataModel dataModel;
-    String path = "src/files/localitzacions.json";
+    private String pathlocation = "src/files/localitzacions.json";
+    private String pathusers = "src/files/users.json";
 
     public JsonModel(){
 
         try{
-            String text = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+            String text = new String(Files.readAllBytes(Paths.get(pathlocation)), StandardCharsets.UTF_8);
             try{
                 Gson gson = new Gson();
-                dataModel = gson.fromJson(new FileReader(path), DataModel.class);
+                dataModel = gson.fromJson(new FileReader(pathlocation), DataModel.class);
             }catch (JsonSyntaxException jse){
                 JOptionPane.showMessageDialog(
                         new Frame(),
@@ -40,6 +40,18 @@ public class JsonModel {
 
     public DataModel getDataModel() {
         return dataModel;
+    }
+
+    public static void insertIntoJsonUsers(User user){
+        Gson gson = new Gson();
+
+
+        try(FileWriter fw = new FileWriter("src/files/user.json")){
+            gson.toJson(user, fw);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }
