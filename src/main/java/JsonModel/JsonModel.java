@@ -54,4 +54,16 @@ public class JsonModel {
         }
     }
 
+    public static void insertIntoJsonLocations(Location location){
+        Gson gson = new Gson();
+
+
+        try(FileWriter fw = new FileWriter("src/files/userLocations.json")){
+            gson.toJson(location , fw);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }

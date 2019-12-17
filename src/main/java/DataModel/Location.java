@@ -3,6 +3,8 @@ package DataModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Scanner;
+
 public class Location {
     @SerializedName("name")
     @Expose
@@ -26,6 +28,12 @@ public class Location {
     @Expose
     private int stars;
 
+    //constructor per insertar info al json
+    public Location(String name, float[] coordinates, String description) {
+        this.name = name;
+        this.coordinates = coordinates;
+        this.description = description;
+    }
 
     public String getName() {
         return name;
@@ -81,5 +89,30 @@ public class Location {
 
     public void setStars(int stars) {
         this.stars = stars;
+    }
+
+
+    public void findAndInsertLocations(DataModel dataModel){
+        String name, desc;
+        float[] coordinates = new float[2];
+        boolean stop = false;
+        String opt;
+        Scanner sc = new Scanner(System.in);
+
+        opt = "";
+
+        for (int i = 0; i < dataModel.getLocations().size() && !stop; i++) {
+            System.out.println("Introdueix el nom d'uan localitzacio");
+            opt = sc.nextLine();
+            if (dataModel.getLocations().get(i).getName().toLowerCase().equals(opt)){
+                stop = true;
+            }
+        }
+
+        if (!stop){
+            System.out.println("Ho sentim, no hi ha cap localitzacio amb aquest nom");
+        }else{
+
+        }
     }
 }
