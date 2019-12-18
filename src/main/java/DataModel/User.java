@@ -1,13 +1,25 @@
 package DataModel;
 
 import JsonModel.JsonModel;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User {
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("mail")
+    @Expose
     private String mail;
+    @SerializedName("year")
+    @Expose
     private int year;
+    @SerializedName("locations")
+    @Expose
+    private ArrayList<Location> locations;
 
     public User(String name, String mail, int year){
         this.name = name;
@@ -15,11 +27,37 @@ public class User {
         this.year = year;
     }
 
-    public void userHistoryLocations(DataModel dataModel){
+    /** inici metodes classe **/
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", mail='" + mail + '\'' +
+                ", year=" + year +
+                ", location=" + locations +
+                '}';
+    }
+
+    /** fi metodes classe **/
+
+
+
+
+    /** funcionalitats classe **/
+    //opcio 1-A
+    public static void userHistoryLocations(DataModel dataModel, User user){
         boolean stop = false, found = false;
         Scanner sc = new Scanner(System.in);
         String opcio, name, desc;
-        float[] coordiantes = new float[2];
+        float[] coordinates = new float[2];
 
         name = "";
         opcio = "";
@@ -39,7 +77,7 @@ public class User {
 
             //bucle que no parara fins que no s'hagi crear una localitzacio
             while(!stop){
-                System.out.println("Nom de la localització: ");
+                System.out.println("Nom de la localització: (si/no)");
                 name = sc.nextLine();
                 for (int i = 0; i < dataModel.getLocations().size() && !found; i++) {
                     if (name.equals(dataModel.getLocations().get(i).getName())){
@@ -56,17 +94,17 @@ public class User {
             }
 
             System.out.println("Latitud: ");
-            coordiantes[0] = sc.nextFloat();
+            coordinates[0] = sc.nextFloat();
             System.out.println("Latitud: ");
-            coordiantes[1] = sc.nextFloat();
+            coordinates[1] = sc.nextFloat();
             System.out.println("Descripció");
             desc = sc.nextLine();
 
-            Location location = new Location(name, coordiantes, desc);
+            Location location = new Location(name, coordinates, desc);
 
-            JsonModel.insertIntoJsonLocations(location);
+            JsonModel.insertIntoJsonLocations(location, user);
         }
-
-
     }
+
+    /** fi funcioanlitats classe **/
 }

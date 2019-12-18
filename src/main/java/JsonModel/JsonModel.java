@@ -2,6 +2,7 @@ package JsonModel;
 
 import DataModel.*;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.FileWriter;
@@ -15,13 +16,13 @@ import java.nio.file.Paths;
 
 public class JsonModel {
     private DataModel dataModel;
-    private String pathlocation = "src/files/localitzacions.json";
-    private String pathusers = "src/files/users.json";
+    private static String pathlocation = "src/files/localitzacions.json";
+    private static String pathusers = "src/files/users.json";
 
+    /** reading locations.json file **/
     public JsonModel(){
-
         try{
-            String text = new String(Files.readAllBytes(Paths.get(pathlocation)), StandardCharsets.UTF_8);
+            String text = Files.readString(Paths.get(pathlocation));
             try{
                 Gson gson = new Gson();
                 dataModel = gson.fromJson(new FileReader(pathlocation), DataModel.class);
@@ -42,11 +43,13 @@ public class JsonModel {
         return dataModel;
     }
 
+
+    /** adding new user to user.json **/
     public static void insertIntoJsonUsers(User user){
         Gson gson = new Gson();
 
 
-        try(FileWriter fw = new FileWriter("src/files/user.json")){
+        try(FileWriter fw = new FileWriter("src/files/users.json")){
             gson.toJson(user, fw);
 
         }catch (IOException e){
@@ -54,15 +57,36 @@ public class JsonModel {
         }
     }
 
-    public static void insertIntoJsonLocations(Location location){
+    /** inserting new locations to user **/
+    public static void insertIntoJsonLocations(Location location, User user){
+        JsonObject object_locations_to_insert = new JsonObject();
         Gson gson = new Gson();
 
 
-        try(FileWriter fw = new FileWriter("src/files/userLocations.json")){
-            gson.toJson(location , fw);
+        object_locations_to_insert.addProperty("name", location.getName());
+        object_locations_to_insert.addProperty("latitud", location.getCoordinates()[0]);
+        object_locations_to_insert.addProperty("longitud", location.getCoordinates()[1]);
+        object_locations_to_insert.addProperty("description", location.getDescription());
 
+
+        try {
+            String text = Files.readString(Paths.get(pathusers));
+
+            try (FileWriter fw = new FileWriter(text)) {
+                gson.toJson(object_locations_to_insert.toString());
+                //object_user.get("locations").getAsJsonArray().add(object_locations_to_insert);
+
+            } catch (JsonSyntaxException jse) {
+                JOptionPane.showMessageDialog(
+                        new Frame(),
+                        jse.getMessage(),
+                        "Json File Error",
+                        JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
         }catch (IOException e){
             e.printStackTrace();
+            System.exit(0);
         }
     }
 

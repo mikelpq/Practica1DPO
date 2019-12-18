@@ -1,12 +1,13 @@
 package Menu;
 
+import DataModel.DataModel;
 import DataModel.User;
 import JsonModel.JsonModel;
 
 import java.util.Scanner;
 
 public class Menu {
-    public static void userInfo(){
+    public static User userInfo(){
         Scanner sc = new Scanner(System.in);
         String name, mail;
         int year;
@@ -26,6 +27,7 @@ public class Menu {
         //INTRODUIR AL JSON
         JsonModel.insertIntoJsonUsers(user);
 
+        return user;
     }
 
     public static int menu(){
@@ -36,6 +38,33 @@ public class Menu {
         opcio = sc.nextInt();
 
         return opcio;
+    }
+    public static void userMenuU(DataModel dataModel, User user){
+        Scanner sc = new Scanner(System.in);
+        String opcio = "";
+
+        while (!opcio.equals('f')){
+            System.out.println(" a) Les meves localitzacions \n b) Historial de localitzacions \n c) Les meves rutes \n d) Parades i estacions preferides \n e)Estacions inaugurades el meu any de naixement \n f) Tornar al menú principal");
+            opcio = sc.nextLine();
+            switch (opcio){
+                case "a":
+                        User.userHistoryLocations(dataModel, user);
+                    break;
+                case "b":
+
+                    break;
+                case "c":
+                    break;
+                case "d":
+                    break;
+                case "e":
+                    break;
+                case "f":
+                    break;
+                default:
+                    System.out.println("Error, lletra incorrecte");
+            }
+        }
     }
 
 

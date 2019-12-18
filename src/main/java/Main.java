@@ -1,4 +1,4 @@
-import DataModel.DataModel;
+import DataModel.*;
 import JsonModel.JsonModel;
 import Menu.Menu;
 
@@ -7,15 +7,17 @@ public class Main {
         JsonModel jsonModel = new JsonModel();
         DataModel dataModel  = jsonModel.getDataModel();
         int opcio = 0;
+        User user;
 
         //get new user info
-        Menu.userInfo();
+        user = Menu.userInfo();
 
         while(opcio != 5){
             opcio = Menu.menu();
 
             switch (opcio){
                 case 1:
+                    Menu.userMenuU(dataModel, user);
                     break;
                 case 2:
                     break;
