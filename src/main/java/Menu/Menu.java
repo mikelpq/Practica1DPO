@@ -1,12 +1,13 @@
 package Menu;
 
-import DataModel.DataModel;
-import DataModel.User;
-import JsonModel.JsonModel;
+import DataModel.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
+
+    /** get user info anc create new user **/
     public static User userInfo(){
         Scanner sc = new Scanner(System.in);
         String name, mail;
@@ -23,13 +24,10 @@ public class Menu {
 
         user = new User(name, mail, year);
 
-
-        //INTRODUIR AL JSON
-        JsonModel.insertIntoJsonUsers(user);
-
         return user;
     }
 
+    /** MAIN MENU **/
     public static int menu(){
         Scanner sc = new Scanner(System.in);
         int opcio;
@@ -39,7 +37,9 @@ public class Menu {
 
         return opcio;
     }
-    public static void userMenuU(DataModel dataModel, User user){
+
+    /** SUB MENU OPCIO 1: GESTIO USUARI **/
+    public static void userMenuU(ArrayList<Location> location_created, ArrayList<Location> location_fav, ArrayList<Location> location_searched){
         Scanner sc = new Scanner(System.in);
         String opcio = "";
 
@@ -48,7 +48,7 @@ public class Menu {
             opcio = sc.nextLine();
             switch (opcio){
                 case "a":
-                        User.userHistoryLocations(dataModel, user);
+                        User.userCreatedLocations(location_created);
                     break;
                 case "b":
 

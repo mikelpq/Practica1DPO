@@ -2,12 +2,19 @@ import DataModel.*;
 import JsonModel.JsonModel;
 import Menu.Menu;
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
         JsonModel jsonModel = new JsonModel();
         DataModel dataModel  = jsonModel.getDataModel();
         int opcio = 0;
         User user;
+        ArrayList<Location> locations_searched = new ArrayList<>();
+        ArrayList<Location> locations_created = new ArrayList<>();
+        ArrayList<Location> locations_fav = new ArrayList<>();
+
+
 
         //get new user info
         user = Menu.userInfo();
@@ -17,11 +24,13 @@ public class Main {
 
             switch (opcio){
                 case 1:
-                    Menu.userMenuU(dataModel, user);
+                    Menu.userMenuU(locations_created, locations_fav, locations_searched);
                     break;
                 case 2:
+                    Location.findAndInsertLocations(dataModel, locations_created);
                     break;
                 case 3:
+                    Location.routePlanifier(dataModel);
                     break;
                 case 4:
                     break;
@@ -33,6 +42,6 @@ public class Main {
             }
         }
 
-
+        JsonModel.insertIntoJsonUsers(locations_created, locations_fav, locations_searched, user);
     }
 }

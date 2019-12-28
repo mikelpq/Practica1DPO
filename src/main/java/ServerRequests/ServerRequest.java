@@ -1,10 +1,7 @@
 package ServerRequests;
 
 import Environment.EnvironmentKeys;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 
 import java.io.IOException;
 
@@ -27,29 +24,34 @@ public class ServerRequest {
          * }
          */
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.github.help").newBuilder();
-        urlBuilder.addQueryParameter("arriveBy",  arrive);
-        urlBuilder.addQueryParameter("date",  arrive);
-        urlBuilder.addQueryParameter("fromPlace",  name_src);
-        urlBuilder.addQueryParameter("maxWalkDistance",  distancia);
-        urlBuilder.addQueryParameter("mode",  "BUS, WALK, TRANSIT");
-        urlBuilder.addQueryParameter("time",  dateString);
-        urlBuilder.addQueryParameter("toPlace",  name_dst);
-        String url = urlBuilder.build().toString();
+        //parametres de la request
+        FormBody formBody = new FormBody.Builder()
+                .add("arriveBy",  arrive)
+                .add("date",  arrive)
+                .add("fromPlace",  name_src)
+                .add("maxWalkDistance",  distancia)
+                .add("mode",  "BUS, WALK, TRANSIT")
+                .add("time",  dateString)
+                .add("toPlace",  name_dst)
+                .build();
 
         Request request = new Request.Builder()
-                .header("app_id", EnvironmentKeys.getApp_id())
-                .header("app_key", EnvironmentKeys.getApp_key())
-                .url(url).build();
+                .url(EnvironmentKeys.getUrl())
+                .addHeader("app_id", EnvironmentKeys.getApp_id())
+                .addHeader("app_key", EnvironmentKeys.getApp_key())
+                .post(formBody)
+                .build();
 
-        try {
-            Response response = client.newCall(request).execute();
+        try (Response response = client.newCall(request).execute()){
+
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code" + response);
+            }
 
             System.out.println(response.body().string());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

@@ -25,6 +25,7 @@ public class User {
         this.name = name;
         this.mail = mail;
         this.year = year;
+
     }
 
     /** inici metodes classe **/
@@ -52,8 +53,8 @@ public class User {
 
 
     /** funcionalitats classe **/
-    //opcio 1-A
-    public static void userHistoryLocations(DataModel dataModel, User user){
+    //opcio 1-A: crear localitzacions i veure les creades
+    public static void userCreatedLocations(ArrayList<Location> locations){
         boolean stop = false, found = false;
         Scanner sc = new Scanner(System.in);
         String opcio, name, desc;
@@ -63,7 +64,7 @@ public class User {
         opcio = "";
 
         while (!stop){
-            System.out.println("Vols crear una nova localització?");
+            System.out.println("Vols crear una nova localització?(si/no)");
             opcio = sc.nextLine();
             if (opcio.toLowerCase().equals("si") || opcio.toLowerCase().equals("no")){
                 stop = true;
@@ -77,10 +78,10 @@ public class User {
 
             //bucle que no parara fins que no s'hagi crear una localitzacio
             while(!stop){
-                System.out.println("Nom de la localització: (si/no)");
+                System.out.println("Nom de la localització: ");
                 name = sc.nextLine();
-                for (int i = 0; i < dataModel.getLocations().size() && !found; i++) {
-                    if (name.equals(dataModel.getLocations().get(i).getName())){
+                for (int i = 0; i < locations.size() && !found; i++) {
+                    if (name.equals(locations.get(i).getName())){
                         found = true;
                     }
                 }
@@ -100,9 +101,23 @@ public class User {
             System.out.println("Descripció");
             desc = sc.nextLine();
 
+            //creem nova localitzacio
             Location location = new Location(name, coordinates, desc);
+            //afegim la nova localitzacio
+            locations.add(location);
 
-            JsonModel.insertIntoJsonLocations(location, user);
+        }
+    }
+
+    //OPCIO 1-B: veure les localitzacions buscades a la opcio 2
+    public static void userSearchedLocations(ArrayList<Location> location){
+        if (location.size() == 0){
+            System.out.println("Encara no has buscat cap localització!\n Per buscar-ne una, accedeix a l'opció 2 del menú principal.");
+        }else{
+            System.out.println("Localitzacions buscades: ");
+            for (int i = 0; i < location.size(); i++) {
+                System.out.println("  - " + location.get(i).getName());
+            }
         }
     }
 

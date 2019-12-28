@@ -10,9 +10,7 @@ import okhttp3.Request;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.util.*;
 
 public class Location {
     @SerializedName("name")
@@ -106,35 +104,54 @@ public class Location {
 
 
     /** inici funcionalitats classe **/
-    public void findAndInsertLocations(DataModel dataModel){
-        String name, desc;
+    //OPCIO 2
+    public static void findAndInsertLocations(DataModel dataModel, ArrayList<Location> locations){
+        int index = Integer.MIN_VALUE, i = 0;
+        String name, desc, input;
         float[] coordinates = new float[2];
-        boolean stop = false;
-        String opt;
+        boolean stop = true, data = false;
         Scanner sc = new Scanner(System.in);
 
-        opt = "";
-
-        for (int i = 0; i < dataModel.getLocations().size() && !stop; i++) {
+        while (stop && i < locations.size()) {
             System.out.println("Introdueix el nom d'uan localitzacio");
-            opt = sc.nextLine();
-            if (dataModel.getLocations().get(i).getName().toLowerCase().equals(opt)){
-                stop = true;
+            input = sc.nextLine();
+            for (i = 0; i < dataModel.getLocations().size() && stop; i++) {
+                if (dataModel.getLocations().get(i).getName().toLowerCase().equals(input)) {
+                    stop = false;
+                    data = true;
+                    index = i;
+                }
+            }
+
+            for (i = 0; i < locations.size() && stop; i++) {
+                if (locations.get(i).getName().toLowerCase().equals(input)) {
+                    stop = false;
+                    index = i;
+                }
             }
         }
 
-        if (!stop){
+        //mostrem la restant info de la localitzacio en cas que existeixi o un missatge d'error
+        if (stop){
             System.out.println("Ho sentim, no hi ha cap localitzacio amb aquest nom");
         }else{
-
+            if (data){
+                System.out.println("Posicio: " + Arrays.toString(dataModel.getLocations().get(index).getCoordinates()));
+                System.out.println("Descripcio: ");
+                System.out.println(dataModel.getLocations().get(index).getDescription());
+            }else {
+                System.out.println("Posicio: " + Arrays.toString(locations.get(index).getCoordinates()));
+                System.out.println("Descripcio: ");
+                System.out.println(locations.get(index).getDescription());
+            }
         }
     }
 
 
-    //opcio 3
-    public void routePlanifier(DataModel dataModel){
+    //OPCIO 3
+    public static void routePlanifier(DataModel dataModel){
         boolean found = false;
-        int i = 0;
+        int i;
         Scanner sc = new Scanner(System.in);
         String name_src = "", name_dst = "", kk = "", arrive = "true", distancia = "0";
         float[] coordinates_src = new float[2], coordinates_dst = new float[2];
@@ -142,11 +159,12 @@ public class Location {
 
         //comprovem si existeix el origen
         while(!found){
-            System.out.println("Origen? (lat,lon/nom localització)");
-
+            System.out.println("Origen? (lat,lon/ nom localització)");
             //comprovem si s'introdueix el nom de la localitzacio o les coordenades
             name_src = sc.nextLine();
-            String[] res = name_dst.split(",");
+
+            String[] res = name_src.split(",");
+
             if (res.length > 1){
                 if (res.length > 2){
                     System.out.println("ERROR! Format incorrecte");
@@ -160,16 +178,23 @@ public class Location {
                 }
             }
 
+            i = 0;
 
             while(!found && i < dataModel.getLocations().size()){
-                if (name_src.toLowerCase().equals(dataModel.getLocations().get(i).getName()) ||
-                        (coordinates_src[0] == dataModel.getLocations().get(i).getCoordinates()[0] &&
-                                coordinates_src[1] == dataModel.getLocations().get(i).getCoordinates()[1])){
+
+                if (name_src.equals(dataModel.getLocations().get(i).getName())){
                     found = true;
+                    i = 0;
                 }
+
+                if (coordinates_src[0] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_src[1] == dataModel.getLocations().get(i).getCoordinates()[1]){
+                    found = true;
+                    i = 0;
+                }
+
                 i++;
             }
-            if (i == dataModel.getLocations().size()){
+            if (!found){
                 System.out.println("Ho sentim, aquesta localització no existeix");
                 i = 0;
             }
@@ -197,16 +222,22 @@ public class Location {
                 }
             }
 
+            i = 0;
 
             while(!found && i < dataModel.getLocations().size()){
-                if (name_dst.toLowerCase().equals(dataModel.getLocations().get(i).getName()) ||
-                        (coordinates_dst[0] == dataModel.getLocations().get(i).getCoordinates()[0] &&
-                                coordinates_dst[1] == dataModel.getLocations().get(i).getCoordinates()[1])){
+                if (name_dst.equals(dataModel.getLocations().get(i).getName())){
                     found = true;
+                    i = 0;
                 }
-                i++;
+
+                if (coordinates_dst[0] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_dst[1] == dataModel.getLocations().get(i).getCoordinates()[1]){
+                    found = true;
+                    i = 0;
+                }
+
+                i++;;
             }
-            if (i == dataModel.getLocations().size()){
+            if (!found){
                 System.out.println("Ho sentim, aquesta localització no existeix");
                 i = 0;
             }
@@ -233,10 +264,12 @@ public class Location {
 
         System.out.println("Hora? HH:MMam/HH:MMpm");
         dateString = sc.next();
+        sc.nextLine();
 
         System.out.println("Maxima distancia caminant en metres?");
         distancia = sc.nextLine();
 
+        System.out.println("inici request");
         //inici peticio HTTP
         ServerRequest.createLocationRequest(name_dst, name_src, arrive, dateString, distancia);
 
