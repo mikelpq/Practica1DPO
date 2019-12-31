@@ -153,7 +153,7 @@ public class Location {
         boolean found = false;
         int i;
         Scanner sc = new Scanner(System.in);
-        String name_src = "", name_dst = "", kk = "", arrive = "true", distancia = "0";
+        String name_src = "", name_dst = "", kk = "", arrive = "true", distancia = "0", coor_src = "", coor_dst = "";
         float[] coordinates_src = new float[2], coordinates_dst = new float[2];
         String[] trash = new String[2];
 
@@ -170,8 +170,8 @@ public class Location {
                     System.out.println("ERROR! Format incorrecte");
                 }else{
                     try{
-                        coordinates_dst[1] = Float.parseFloat(res[1]);
-                        coordinates_dst[0] = Float.parseFloat(res[0]);
+                        coordinates_src[1] = Float.parseFloat(res[1]);
+                        coordinates_src[0] = Float.parseFloat(res[0]);
                     }catch (NumberFormatException e){
                         e.printStackTrace();
                     }
@@ -183,11 +183,13 @@ public class Location {
             while(!found && i < dataModel.getLocations().size()){
 
                 if (name_src.equals(dataModel.getLocations().get(i).getName())){
+                    coor_src = dataModel.getLocations().get(i).getCoordinates()[1] + ", " + dataModel.getLocations().get(i).getCoordinates()[0];
                     found = true;
                     i = 0;
                 }
 
-                if (coordinates_src[0] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_src[1] == dataModel.getLocations().get(i).getCoordinates()[1]){
+                if (coordinates_src[1] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_src[0] == dataModel.getLocations().get(i).getCoordinates()[1]){
+                    coor_src = coordinates_src[1] + ", " + coordinates_src[0];
                     found = true;
                     i = 0;
                 }
@@ -226,11 +228,13 @@ public class Location {
 
             while(!found && i < dataModel.getLocations().size()){
                 if (name_dst.equals(dataModel.getLocations().get(i).getName())){
+                    coor_dst = dataModel.getLocations().get(i).getCoordinates()[1] + ", " + dataModel.getLocations().get(i).getCoordinates()[0];
                     found = true;
                     i = 0;
                 }
 
-                if (coordinates_dst[0] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_dst[1] == dataModel.getLocations().get(i).getCoordinates()[1]){
+                if (coordinates_dst[1] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_dst[0] == dataModel.getLocations().get(i).getCoordinates()[1]){
+                    coor_dst = coordinates_dst[1] + ", " + coordinates_dst[0];
                     found = true;
                     i = 0;
                 }
@@ -263,7 +267,7 @@ public class Location {
 
 
         System.out.println("Hora? HH:MMam/HH:MMpm");
-        dateString = sc.next();
+        String timeString = sc.next();
         sc.nextLine();
 
         System.out.println("Maxima distancia caminant en metres?");
@@ -271,7 +275,7 @@ public class Location {
 
         System.out.println("inici request");
         //inici peticio HTTP
-        ServerRequest.createLocationRequest(name_dst, name_src, arrive, dateString, distancia);
+        ServerRequest.createLocationRequest(coor_src, coor_dst, arrive, dateString, timeString, distancia);
 
     }
 
