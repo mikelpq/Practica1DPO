@@ -1,16 +1,16 @@
 package ServerRequests;
 
+import BusTimeResponse.*;
 import Environment.EnvironmentKeys;
-import RouteResponse.*;
-import okhttp3.*;
-
-import com.google.gson.*;
-
-import java.io.IOException;
-
+import RouteResponse.ResponseJson;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import java.io.IOException;
 
 public class ServerRequest {
 
@@ -69,12 +69,12 @@ public class ServerRequest {
         return responseJson;
     }
 
-    public static ResponseJson createBusTimeRequest(String parada){
+    public static BusTime createBusTimeRequest(String parada){
         OkHttpClient client = new OkHttpClient();
-        BusResponse responseJson = null;
+        BusTime responseJson = null;
         Response response;
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(EnvironmentKeys.getUrl()).newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(EnvironmentKeys.getUrlBus()).newBuilder();
 
         urlBuilder.addQueryParameter("app_id", EnvironmentKeys.getApp_id());
         urlBuilder.addQueryParameter("app_key", EnvironmentKeys.getApp_key());
@@ -86,6 +86,7 @@ public class ServerRequest {
                 .url(url)
                 .build();
 
+
         try{
             response = client.newCall(request).execute();
 
@@ -93,8 +94,9 @@ public class ServerRequest {
                 System.out.println("Error, hi ha algun paràmetre erroni");
             }else{
                 String jsonData = response.body().string();
+                System.out.println(jsonData);
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                responseJson = gson.fromJson(jsonData, ResponseJson.class);
+                responseJson = gson.fromJson(jsonData, BusTime.class);
             }
 
         } catch (IOException e) {
@@ -102,5 +104,41 @@ public class ServerRequest {
         }
 
         return responseJson;
+    }
+
+    public static void createStationsRequest(){
+        OkHttpClient client = new OkHttpClient();
+        BusTime responseJson = null;
+        Response response;
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(EnvironmentKeys.getUrlBus()).newBuilder();
+
+        urlBuilder.addQueryParameter("app_id", EnvironmentKeys.getApp_id());
+        urlBuilder.addQueryParameter("app_key", EnvironmentKeys.getApp_key());
+        urlBuilder.addQueryParameter("codi_parada", parada);
+
+        String url = urlBuilder.build().toString();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+
+        try{
+            response = client.newCall(request).execute();
+
+            if (!response.isSuccessful()) {
+                System.out.println("Error, hi ha algun paràmetre erroni");
+            }else{
+                String jsonData = response.body().string();
+                System.out.println(jsonData);
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                responseJson = gson.fromJson(jsonData, BusTime.class);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        re
     }
 }

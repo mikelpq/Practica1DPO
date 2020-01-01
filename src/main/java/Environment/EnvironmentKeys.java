@@ -6,6 +6,7 @@ public final class EnvironmentKeys {
     private final static String app_id = "0f0f156a";
     private final static String app_key = "34a92cf3fe9ae7bcd7a421f442a02d1c";
     private final static String url = "https://api.tmb.cat/v1/planner/plan?";
+    private final static String urlBus = "https://api.tmb.cat/v1/ibus/stops/2775?";
 
 
 
@@ -18,8 +19,10 @@ public final class EnvironmentKeys {
         return app_key;
     }
 
-    /** metode per mantenir format d'encapsulació i no haver de escriure la URL manualment **/
+    /** metodes per mantenir format d'encapsulació i no haver de escriure la URL manualment **/
     public static String getUrl() {
         return url;
     }
+
+    public static String getUrlBus(){ return urlBus; }
 }

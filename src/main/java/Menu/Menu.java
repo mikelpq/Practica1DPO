@@ -1,6 +1,7 @@
 package Menu;
 
 import DataModel.*;
+import RouteResponse.ResponseJson;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -39,7 +40,7 @@ public class Menu {
     }
 
     /** SUB MENU OPCIO 1: GESTIO USUARI **/
-    public static void userMenuU(ArrayList<Location> location_created, ArrayList<Location> location_fav, ArrayList<Location> location_searched){
+    public static void userMenuU(ArrayList<Location> location_created, ArrayList<Location> location_fav, ArrayList<Location> location_searched, ArrayList<Route> routes, User user){
         Scanner sc = new Scanner(System.in);
         String opcio = "";
 
@@ -51,13 +52,15 @@ public class Menu {
                         User.userCreatedLocations(location_created);
                     break;
                 case "b":
-
+                        User.userSearchedLocations(location_searched);
                     break;
                 case "c":
+                    User.userCreatedRoutes(routes);
                     break;
                 case "d":
                     break;
                 case "e":
+                    User.userSameYearStations(user);
                     break;
                 case "f":
                     break;

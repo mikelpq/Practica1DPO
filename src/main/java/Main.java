@@ -13,6 +13,7 @@ public class Main {
         ArrayList<Location> locations_searched = new ArrayList<>();
         ArrayList<Location> locations_created = new ArrayList<>();
         ArrayList<Location> locations_fav = new ArrayList<>();
+        ArrayList<Route> routes_created = new ArrayList<>();
 
 
 
@@ -24,15 +25,16 @@ public class Main {
 
             switch (opcio){
                 case 1:
-                    Menu.userMenuU(locations_created, locations_fav, locations_searched);
+                    Menu.userMenuU(locations_created, locations_fav, locations_searched, routes_created, user);
                     break;
                 case 2:
-                    Location.findAndInsertLocations(dataModel, locations_created);
+                    Location.findAndInsertLocations(dataModel, locations_created, locations_fav, locations_searched);
                     break;
                 case 3:
-                    Location.routePlanifier(dataModel);
+                    Location.routePlanifier(dataModel, routes_created);
                     break;
                 case 4:
+                    Location.busTime();
                     break;
                 default:
                     if(opcio != 5) {

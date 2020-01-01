@@ -1,6 +1,7 @@
 package DataModel;
 
 import JsonModel.JsonModel;
+import RouteResponse.ResponseJson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -29,6 +30,19 @@ public class User {
     }
 
     /** inici metodes classe **/
+    public String getName() {
+        return name;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+
     public ArrayList<Location> getLocations() {
         return locations;
     }
@@ -109,9 +123,10 @@ public class User {
         }
     }
 
+
     //OPCIO 1-B: veure les localitzacions buscades a la opcio 2
     public static void userSearchedLocations(ArrayList<Location> location){
-        if (location.size() == 0){
+        if (location.isEmpty()){
             System.out.println("Encara no has buscat cap localització!\n Per buscar-ne una, accedeix a l'opció 2 del menú principal.");
         }else{
             System.out.println("Localitzacions buscades: ");
@@ -121,5 +136,26 @@ public class User {
         }
     }
 
+
+    //OPCIO 1-C: veure les rutes creades a la opcio 3
+    public static void userCreatedRoutes(ArrayList<Route> routes){
+        if (routes.isEmpty()){
+            System.out.println("Encara no has realitzat cap ruta :( \nPer buscar-ne una, accedeix a l'opció 3 del menú principal");
+        }else{
+            for (int i = 0; i < routes.size(); i++) {
+                System.out.println("->Ruta " + (i+1) );
+                System.out.println("\t -Origen: " + routes.get(i).getOrigin());
+                System.out.println("\t -Destiny: " + routes.get(i).getDestiny());
+                System.out.println("\t Dia de sortida " + routes.get(i).getDate() + " a les " + routes.get(i).getTime());
+                Printing.showRoute(routes.get(i).getRoute());
+            }
+        }
+    }
+
+
+    //OPCIO 1-E: estacions innaugurades el mateix any de naixement
+    public static void userSameYearStations(User user){
+        System.out.println("Estacions innagurades el " + user.getYear());
+    }
     /** fi funcioanlitats classe **/
 }

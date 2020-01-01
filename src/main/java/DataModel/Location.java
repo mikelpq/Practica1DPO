@@ -1,5 +1,6 @@
 package DataModel;
 
+import BusTimeResponse.BusTime;
 import RouteResponse.ResponseJson;
 import ServerRequests.ServerRequest;
 import com.google.gson.annotations.Expose;
@@ -29,12 +30,21 @@ public class Location {
     @SerializedName("stars")
     @Expose
     private int stars;
+    //atribut per a l'opcio 2
+    private String tipus;
 
     //constructor per insertar info al json
     public Location(String name, float[] coordinates, String description) {
         this.name = name;
         this.coordinates = coordinates;
         this.description = description;
+    }
+
+    public Location(String name, float[] coordinates, String description, String tipus){
+        this.name = name;
+        this.coordinates = coordinates;
+        this.description = description;
+        this.tipus = tipus;
     }
 
     /** inici metodes classe **/
@@ -100,14 +110,14 @@ public class Location {
 
     /** inici funcionalitats classe **/
     //OPCIO 2
-    public static void findAndInsertLocations(DataModel dataModel, ArrayList<Location> locations){
-        int index = Integer.MIN_VALUE, i = 0;
-        String name, desc, input;
-        float[] coordinates = new float[2];
-        boolean stop = true, data = false;
+    public static void findAndInsertLocations(DataModel dataModel, ArrayList<Location> locations_created, ArrayList<Location> locations_searched, ArrayList<Location> locations_fav){
+        int index = 0, i = 0;
+        String place = "", desc = "", input, type = "";
+        float[] coord = new float[2];
+        boolean stop = true, data = false, positive = false;
         Scanner sc = new Scanner(System.in);
 
-        while (stop && i < locations.size()) {
+        while (stop && i < locations_created.size()) {
             System.out.println("Introdueix el nom d'uan localitzacio");
             input = sc.nextLine();
             for (i = 0; i < dataModel.getLocations().size() && stop; i++) {
@@ -115,36 +125,76 @@ public class Location {
                     stop = false;
                     data = true;
                     index = i;
+                    place = input;
                 }
             }
 
-            for (i = 0; i < locations.size() && stop; i++) {
-                if (locations.get(i).getName().toLowerCase().equals(input)) {
+            for (i = 0; i < locations_created.size() && stop; i++) {
+                if (locations_created.get(i).getName().toLowerCase().equals(input)) {
                     stop = false;
                     index = i;
+                    place = input;
                 }
             }
+            if (stop) System.out.println("Error, no hi ha cap localització amb aquest nom");
         }
 
         //mostrem la restant info de la localitzacio en cas que existeixi o un missatge d'error
-        if (stop){
-            System.out.println("Ho sentim, no hi ha cap localitzacio amb aquest nom");
-        }else{
-            if (data){
-                System.out.println("Posicio: " + Arrays.toString(dataModel.getLocations().get(index).getCoordinates()));
-                System.out.println("Descripcio: ");
-                System.out.println(dataModel.getLocations().get(index).getDescription());
+        if (data){
+            System.out.println("Posicio: " + Arrays.toString(dataModel.getLocations().get(index).getCoordinates()));
+            coord = dataModel.getLocations().get(index).getCoordinates();
+            System.out.println("Descripcio: ");
+            desc = dataModel.getLocations().get(index).getDescription();
+            System.out.println(dataModel.getLocations().get(index).getDescription());
+        }else {
+            System.out.println("Posicio: " + Arrays.toString(locations_created.get(index).getCoordinates()));
+            coord = locations_created.get(index).getCoordinates();
+            System.out.println("Descripcio: ");
+            desc = locations_created.get(index).getDescription();
+            System.out.println(locations_created.get(index).getDescription());
+        }
+
+        stop = false;
+
+        while (!stop){
+            System.out.println("Vols guardar la localització trobada com a preferida? (sí/no)");
+            input = sc.nextLine();
+            if (input.equals("s") || input.equals("a")){
+                stop = true;
+                if(input.equals("s")){
+                    positive = true;
+                }
             }else {
-                System.out.println("Posicio: " + Arrays.toString(locations.get(index).getCoordinates()));
-                System.out.println("Descripcio: ");
-                System.out.println(locations.get(index).getDescription());
+                System.out.println("Error! S'ha d'introduir si o no");
             }
         }
+
+        if (positive){
+            stop = false;
+            while (!stop){
+                System.out.println("Tipus(casa/feina/estudis/oci/cultura):");
+                input = sc.nextLine();
+                input.toLowerCase();
+                if (input.equals("casa") || input.equals("feina") || input.equals("estudis") || input.equals("oci") || input.equals("cultura")){
+                    stop = true;
+                    type = input;
+                }else {
+                    System.out.println("Error! S'ha d'introduir \"casa\", \"feina\", \"estudis\", \"oci\" o \"cultura\".");
+                }
+            }
+        }
+        Location location = new Location(place, coord, desc, type);
+        //en cas que es desitji s'afegira la nova localització
+        if (stop){
+            locations_fav.add(location);
+        }
+        locations_searched.add(location);
+
     }
 
 
     //OPCIO 3
-    public static void routePlanifier(DataModel dataModel){
+    public static void routePlanifier(DataModel dataModel, ArrayList<Route> route){
         boolean found = false;
         int i;
         Scanner sc = new Scanner(System.in);
@@ -275,18 +325,28 @@ public class Location {
         //inici peticio HTTP
         ResponseJson responseJson = ServerRequest.createLocationRequest(coor_src, coor_dst, arrive, dateString, timeString, distancia);
 
+        //guardem ruta
+        Route new_route = new Route(name_src, name_dst, dateString, timeString, distancia, responseJson);
+        route.add(new_route);
+
         //printem ruta
-        Route.showRoute(origen, desti, dateString, timeString, distancia, responseJson);
+        Printing.showRoute(responseJson);
 
     }
 
+    //OPCIO 4
     public static void busTime(){
         Scanner sc = new Scanner(System.in);
         String parada;
+        BusTime busTime;
         System.out.println("Introdueix el codi de parada: ");
         parada = sc.nextLine();
 
         //crida a la request
+        busTime = ServerRequest.createBusTimeRequest(parada);
+
+        //printem
+        Printing.showBusLinesFromStop(busTime);
     }
 
 
