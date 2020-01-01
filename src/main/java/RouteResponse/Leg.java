@@ -1,6 +1,7 @@
 
-package RequestResponse;
+package RouteResponse;
 
+import java.math.BigInteger;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -36,13 +37,13 @@ public class Leg {
     private Integer departureDelay;
     @SerializedName("distance")
     @Expose
-    private Integer distance;
+    private double distance;
     @SerializedName("duration")
     @Expose
     private Integer duration;
     @SerializedName("endTime")
     @Expose
-    private Integer endTime;
+    private BigInteger endTime;
     @SerializedName("from")
     @Expose
     private From_ from;
@@ -102,7 +103,7 @@ public class Leg {
     private String serviceDate;
     @SerializedName("startTime")
     @Expose
-    private Integer startTime;
+    private BigInteger startTime;
     @SerializedName("steps")
     @Expose
     private List<Step> steps = null;
@@ -194,11 +195,11 @@ public class Leg {
         this.departureDelay = departureDelay;
     }
 
-    public Integer getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(Integer distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -210,11 +211,11 @@ public class Leg {
         this.duration = duration;
     }
 
-    public Integer getEndTime() {
+    public BigInteger getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Integer endTime) {
+    public void setEndTime(BigInteger endTime) {
         this.endTime = endTime;
     }
 
@@ -370,11 +371,11 @@ public class Leg {
         this.serviceDate = serviceDate;
     }
 
-    public Integer getStartTime() {
+    public BigInteger getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Integer startTime) {
+    public void setStartTime(BigInteger startTime) {
         this.startTime = startTime;
     }
 

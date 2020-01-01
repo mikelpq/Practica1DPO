@@ -1,5 +1,5 @@
 
-package RequestResponse;
+package RouteResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -8,10 +8,10 @@ public class IntermediateStop {
 
     @SerializedName("lat")
     @Expose
-    private Integer lat;
+    private double lat;
     @SerializedName("lon")
     @Expose
-    private Integer lon;
+    private double lon;
     @SerializedName("name")
     @Expose
     private String name;
@@ -25,19 +25,19 @@ public class IntermediateStop {
     @Expose
     private String vertexType;
 
-    public Integer getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Integer lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public Integer getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(Integer lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 

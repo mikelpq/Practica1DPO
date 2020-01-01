@@ -1,5 +1,5 @@
 
-package RequestResponse;
+package RouteResponse;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

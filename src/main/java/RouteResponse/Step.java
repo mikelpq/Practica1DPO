@@ -1,5 +1,5 @@
 
-package RequestResponse;
+package RouteResponse;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -21,7 +21,7 @@ public class Step {
     private Boolean bogusName;
     @SerializedName("distance")
     @Expose
-    private Integer distance;
+    private double distance;
     @SerializedName("elevation")
     @Expose
     private List<String> elevation = null;
@@ -30,10 +30,10 @@ public class Step {
     private String exit;
     @SerializedName("lat")
     @Expose
-    private Integer lat;
+    private double lat;
     @SerializedName("lon")
     @Expose
-    private Integer lon;
+    private double lon;
     @SerializedName("relativeDirection")
     @Expose
     private String relativeDirection;
@@ -76,11 +76,11 @@ public class Step {
         this.bogusName = bogusName;
     }
 
-    public Integer getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(Integer distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -100,19 +100,19 @@ public class Step {
         this.exit = exit;
     }
 
-    public Integer getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Integer lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public Integer getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(Integer lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 

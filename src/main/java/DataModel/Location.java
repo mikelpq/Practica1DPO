@@ -1,15 +1,10 @@
 package DataModel;
 
-import Environment.EnvironmentKeys;
+import RouteResponse.ResponseJson;
 import ServerRequests.ServerRequest;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import okhttp3.HttpUrl;
-import okhttp3.Request;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 public class Location {
@@ -155,7 +150,7 @@ public class Location {
         Scanner sc = new Scanner(System.in);
         String name_src = "", name_dst = "", kk = "", arrive = "true", distancia = "0", coor_src = "", coor_dst = "";
         float[] coordinates_src = new float[2], coordinates_dst = new float[2];
-        String[] trash = new String[2];
+        String origen = "", desti = "";
 
         //comprovem si existeix el origen
         while(!found){
@@ -186,12 +181,14 @@ public class Location {
                     coor_src = dataModel.getLocations().get(i).getCoordinates()[1] + ", " + dataModel.getLocations().get(i).getCoordinates()[0];
                     found = true;
                     i = 0;
+                    origen = dataModel.getLocations().get(i).getName();
                 }
 
                 if (coordinates_src[1] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_src[0] == dataModel.getLocations().get(i).getCoordinates()[1]){
                     coor_src = coordinates_src[1] + ", " + coordinates_src[0];
                     found = true;
                     i = 0;
+                    origen = dataModel.getLocations().get(i).getName();
                 }
 
                 i++;
@@ -231,12 +228,14 @@ public class Location {
                     coor_dst = dataModel.getLocations().get(i).getCoordinates()[1] + ", " + dataModel.getLocations().get(i).getCoordinates()[0];
                     found = true;
                     i = 0;
+                    desti = dataModel.getLocations().get(i).getName();
                 }
 
                 if (coordinates_dst[1] == dataModel.getLocations().get(i).getCoordinates()[0] && coordinates_dst[0] == dataModel.getLocations().get(i).getCoordinates()[1]){
                     coor_dst = coordinates_dst[1] + ", " + coordinates_dst[0];
                     found = true;
                     i = 0;
+                    desti = dataModel.getLocations().get(i).getName();
                 }
 
                 i++;;
@@ -273,10 +272,21 @@ public class Location {
         System.out.println("Maxima distancia caminant en metres?");
         distancia = sc.nextLine();
 
-        System.out.println("inici request");
         //inici peticio HTTP
-        ServerRequest.createLocationRequest(coor_src, coor_dst, arrive, dateString, timeString, distancia);
+        ResponseJson responseJson = ServerRequest.createLocationRequest(coor_src, coor_dst, arrive, dateString, timeString, distancia);
 
+        //printem ruta
+        Route.showRoute(origen, desti, dateString, timeString, distancia, responseJson);
+
+    }
+
+    public static void busTime(){
+        Scanner sc = new Scanner(System.in);
+        String parada;
+        System.out.println("Introdueix el codi de parada: ");
+        parada = sc.nextLine();
+
+        //crida a la request
     }
 
 

@@ -1,6 +1,7 @@
 
-package RequestResponse;
+package RouteResponse;
 
+import java.math.BigInteger;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +10,7 @@ public class Plan {
 
     @SerializedName("date")
     @Expose
-    private Integer date;
+    private BigInteger date;
     @SerializedName("from")
     @Expose
     private From from;
@@ -20,11 +21,11 @@ public class Plan {
     @Expose
     private To_ to;
 
-    public Integer getDate() {
+    public BigInteger getDate() {
         return date;
     }
 
-    public void setDate(Integer date) {
+    public void setDate(BigInteger date) {
         this.date = date;
     }
 

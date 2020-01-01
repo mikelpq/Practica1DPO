@@ -1,5 +1,5 @@
 
-package RequestResponse;
+package RouteResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

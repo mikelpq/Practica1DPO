@@ -1,6 +1,7 @@
 
-package RequestResponse;
+package RouteResponse;
 
+import java.math.BigInteger;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +19,7 @@ public class Itinerary {
     private Integer elevationLost;
     @SerializedName("endTime")
     @Expose
-    private Integer endTime;
+    private BigInteger endTime;
     @SerializedName("fare")
     @Expose
     private Fare fare;
@@ -27,7 +28,7 @@ public class Itinerary {
     private List<Leg> legs = null;
     @SerializedName("startTime")
     @Expose
-    private Integer startTime;
+    private BigInteger startTime;
     @SerializedName("tooSloped")
     @Expose
     private Boolean tooSloped;
@@ -42,7 +43,7 @@ public class Itinerary {
     private Integer waitingTime;
     @SerializedName("walkDistance")
     @Expose
-    private Integer walkDistance;
+    private double walkDistance;
     @SerializedName("walkLimitExceeded")
     @Expose
     private Boolean walkLimitExceeded;
@@ -74,11 +75,11 @@ public class Itinerary {
         this.elevationLost = elevationLost;
     }
 
-    public Integer getEndTime() {
+    public BigInteger getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Integer endTime) {
+    public void setEndTime(BigInteger endTime) {
         this.endTime = endTime;
     }
 
@@ -98,11 +99,11 @@ public class Itinerary {
         this.legs = legs;
     }
 
-    public Integer getStartTime() {
+    public BigInteger getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Integer startTime) {
+    public void setStartTime(BigInteger startTime) {
         this.startTime = startTime;
     }
 
@@ -138,11 +139,11 @@ public class Itinerary {
         this.waitingTime = waitingTime;
     }
 
-    public Integer getWalkDistance() {
+    public double getWalkDistance() {
         return walkDistance;
     }
 
-    public void setWalkDistance(Integer walkDistance) {
+    public void setWalkDistance(double walkDistance) {
         this.walkDistance = walkDistance;
     }
 
