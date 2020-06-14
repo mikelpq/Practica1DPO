@@ -1,8 +1,5 @@
 package Utilities;
 
-import Model.*;
-import Model.Route;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,9 +10,10 @@ public class Menu {
     public static User userInfoMenu(){
         Scanner sc = new Scanner(System.in);
         String name, mail;
-        int year;
+        int year = 0;
         User user;
-
+        boolean ok = false;
+        
         System.out.println("Benvingut a l'aplicació TMBJson! Si us plau, introdueix les dades que se't demanen.");
         System.out.println("Nom d'usuari: ");
         name = sc.nextLine();
@@ -30,18 +28,18 @@ public class Menu {
     }
 
     /** MAIN MENU **/
-    public static int menu(){
+    public static String menu(){
         Scanner sc = new Scanner(System.in);
-        int opcio;
+        String opcio;
 
         System.out.println(" 1. Gestió usuari\n 2. Buscar localitzacions\n 3. Planejar ruta\n 4. Temps espera del bus\n 5. Sortir\n\n Selecciona una opció:");
-        opcio = sc.nextInt();
+        opcio = sc.nextLine();
 
         return opcio;
     }
 
     /** SUB MENU OPCIO 1: GESTIO USUARI **/
-    public static void userMenuU(ArrayList<Location> location_created, ArrayList<LocationFav> location_fav, ArrayList<Location> location_searched, ArrayList<Route> routes, User user, ArrayList<Location> jsonLocations) throws IOException {
+    public static void userMenuU(User user, ArrayList<Location> jsonLocations) throws IOException {
         Scanner sc = new Scanner(System.in);
         String opcio = "";
 
@@ -50,16 +48,16 @@ public class Menu {
             opcio = sc.nextLine();
             switch (opcio){
                 case "a":
-                    User.userCreateLocations(location_created, jsonLocations);
+                    User.userCreateLocations(user.getLocations_created(), jsonLocations);
                     break;
                 case "b":
-                    User.userSearchedLocations(location_searched);
+                    Printing.userSearchedLocations(user.getLocations_searched());
                     break;
                 case "c":
-                    User.userCreatedRoutes(routes);
+                    Printing.userCreatedRoutes(user.getRoutes_created());
                     break;
                 case "d":
-                    User.userNearStations(location_fav);
+                    User.userNearStations(user.getLocations_fav());
                     break;
                 case "e":
                     User.userSameYearStations(user);
